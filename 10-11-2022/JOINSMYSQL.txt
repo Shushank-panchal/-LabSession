@@ -1,0 +1,137 @@
+Enter password: *****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.30 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use shushank;
+Database changed
+mysql> create table orders(orderid int primary key,customerid int not null,orderdate datetime not null);
+Query OK, 0 rows affected (0.27 sec)
+
+mysql> create table customers(customerid int primary key,customername varchar(30) not null,contactname varchar(20),country varchar(30));
+Query OK, 0 rows affected (1.71 sec)
+
+mysql> insert into orders values(101,2,'1996-09-18');
+Query OK, 1 row affected (0.30 sec)
+
+mysql> insert into orders values(102,40,'1996-09-20');
+Query OK, 1 row affected (1.16 sec)
+
+mysql> insert into orders values(103,4,'2000-09-20');
+Query OK, 1 row affected (0.60 sec)
+
+mysql> insert into customers(1,'ankita','ankita_sharma','India');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '1,'ankita','ankita_sharma','India')' at line 1
+mysql> insert into customers values(1,'ankita','ankita_sharma','India');
+Query OK, 1 row affected (0.38 sec)
+
+mysql> insert into customers values(2,'devi','devi singh','India');
+Query OK, 1 row affected (1.11 sec)
+
+mysql> select * from orders;
++---------+------------+---------------------+
+| orderid | customerid | orderdate           |
++---------+------------+---------------------+
+|     101 |          2 | 1996-09-18 00:00:00 |
+|     102 |         40 | 1996-09-20 00:00:00 |
+|     103 |          4 | 2000-09-20 00:00:00 |
++---------+------------+---------------------+
+3 rows in set (0.04 sec)
+
+mysql> select * from customers;
++------------+--------------+---------------+---------+
+| customerid | customername | contactname   | country |
++------------+--------------+---------------+---------+
+|          1 | ankita       | ankita_sharma | India   |
+|          2 | devi         | devi singh    | India   |
++------------+--------------+---------------+---------+
+2 rows in set (0.00 sec)
+
+mysql> select orders.orderid,customers.customerid,orders.customerid from orders inner join customers on orders.ordersid=customers.customerid;
+ERROR 1054 (42S22): Unknown column 'orders.ordersid' in 'on clause'
+mysql> select orders.orderid,customers.customerid,orders.customerid from orders inner join customers on orders.orderid=customers.customerid;
+Empty set (0.29 sec)
+
+mysql> insert into customers values(102,'devi','devi singh','India');
+Query OK, 1 row affected (0.07 sec)
+
+mysql> insert into customers values(101,'ankita','ankita_sharma','India');
+Query OK, 1 row affected (0.07 sec)
+
+mysql> select orders.orderid,customers.customerid,orders.customerid from orders inner join customers on orders.orderid=customers.customerid;
++---------+------------+------------+
+| orderid | customerid | customerid |
++---------+------------+------------+
+|     101 |        101 |          2 |
+|     102 |        102 |         40 |
++---------+------------+------------+
+2 rows in set (0.00 sec)
+
+mysql> select * from orders full join customers;
++---------+------------+---------------------+------------+--------------+---------------+---------+
+| orderid | customerid | orderdate           | customerid | customername | contactname   | country |
++---------+------------+---------------------+------------+--------------+---------------+---------+
+|     103 |          4 | 2000-09-20 00:00:00 |          1 | ankita       | ankita_sharma | India   |
+|     102 |         40 | 1996-09-20 00:00:00 |          1 | ankita       | ankita_sharma | India   |
+|     101 |          2 | 1996-09-18 00:00:00 |          1 | ankita       | ankita_sharma | India   |
+|     103 |          4 | 2000-09-20 00:00:00 |          2 | devi         | devi singh    | India   |
+|     102 |         40 | 1996-09-20 00:00:00 |          2 | devi         | devi singh    | India   |
+|     101 |          2 | 1996-09-18 00:00:00 |          2 | devi         | devi singh    | India   |
+|     103 |          4 | 2000-09-20 00:00:00 |        101 | ankita       | ankita_sharma | India   |
+|     102 |         40 | 1996-09-20 00:00:00 |        101 | ankita       | ankita_sharma | India   |
+|     101 |          2 | 1996-09-18 00:00:00 |        101 | ankita       | ankita_sharma | India   |
+|     103 |          4 | 2000-09-20 00:00:00 |        102 | devi         | devi singh    | India   |
+|     102 |         40 | 1996-09-20 00:00:00 |        102 | devi         | devi singh    | India   |
+|     101 |          2 | 1996-09-18 00:00:00 |        102 | devi         | devi singh    | India   |
++---------+------------+---------------------+------------+--------------+---------------+---------+
+12 rows in set (0.03 sec)
+
+mysql> select * from orders cross join customers;
++---------+------------+---------------------+------------+--------------+---------------+---------+
+| orderid | customerid | orderdate           | customerid | customername | contactname   | country |
++---------+------------+---------------------+------------+--------------+---------------+---------+
+|     103 |          4 | 2000-09-20 00:00:00 |          1 | ankita       | ankita_sharma | India   |
+|     102 |         40 | 1996-09-20 00:00:00 |          1 | ankita       | ankita_sharma | India   |
+|     101 |          2 | 1996-09-18 00:00:00 |          1 | ankita       | ankita_sharma | India   |
+|     103 |          4 | 2000-09-20 00:00:00 |          2 | devi         | devi singh    | India   |
+|     102 |         40 | 1996-09-20 00:00:00 |          2 | devi         | devi singh    | India   |
+|     101 |          2 | 1996-09-18 00:00:00 |          2 | devi         | devi singh    | India   |
+|     103 |          4 | 2000-09-20 00:00:00 |        101 | ankita       | ankita_sharma | India   |
+|     102 |         40 | 1996-09-20 00:00:00 |        101 | ankita       | ankita_sharma | India   |
+|     101 |          2 | 1996-09-18 00:00:00 |        101 | ankita       | ankita_sharma | India   |
+|     103 |          4 | 2000-09-20 00:00:00 |        102 | devi         | devi singh    | India   |
+|     102 |         40 | 1996-09-20 00:00:00 |        102 | devi         | devi singh    | India   |
+|     101 |          2 | 1996-09-18 00:00:00 |        102 | devi         | devi singh    | India   |
++---------+------------+---------------------+------------+--------------+---------------+---------+
+12 rows in set (0.00 sec)
+
+mysql> select orderid,customerid,country from orders,customers where customers.customerid=orders.orderid;
+ERROR 1052 (23000): Column 'customerid' in field list is ambiguous
+mysql> select orders.orderid,customers.customerid,orders.customerid from orders left join customers on orders.orderid=customers.customerid;
++---------+------------+------------+
+| orderid | customerid | customerid |
++---------+------------+------------+
+|     101 |        101 |          2 |
+|     102 |        102 |         40 |
+|     103 |       NULL |          4 |
++---------+------------+------------+
+3 rows in set (0.18 sec)
+
+mysql> select orders.orderid,customers.customerid,orders.customerid from orders right join customers on orders.orderid=customers.customerid;
++---------+------------+------------+
+| orderid | customerid | customerid |
++---------+------------+------------+
+|    NULL |          1 |       NULL |
+|    NULL |          2 |       NULL |
+|     101 |        101 |          2 |
+|     102 |        102 |         40 |
++---------+------------+------------+
+4 rows in set (0.00 sec)
